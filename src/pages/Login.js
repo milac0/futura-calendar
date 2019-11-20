@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { Redirect } from 'react-router-dom';
+import { Redirect } from "react-router-dom";
 import { PropTypes } from "prop-types";
 import GoogleLogin from "react-google-login";
-
 //mui
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
@@ -21,23 +20,25 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Login = ({ setIsAuthenticated, isAuthenticated }) => {
+const Login = ({ setIsAuthenticated, isAuthenticated, setUser }) => {
   const classes = useStyles();
-  const [error, setError] = useState(false)
+  const [error, setError] = useState(false);
 
   const onSuccesLogin = response => {
     console.log(response);
+    setUser(response);
     setIsAuthenticated(true);
+    localStorage.setItem("calendarToken", JSON.stringify(response.accessToken));
   };
 
   const onFailureLogin = () => {
-    setError(true)
+    setError(true);
   };
 
   return (
     <div className={classes.container}>
       <Typography align="center" variant="h5">
-        {error ? 'Error logging in. Try again.': 'Login to see your calendar.'}
+        {error ? "Error logging in. Try again." : "Login to see your calendar."}
       </Typography>
       <div className={classes.googleButtonContainer}>
         <GoogleLogin
@@ -58,7 +59,6 @@ const Login = ({ setIsAuthenticated, isAuthenticated }) => {
           onFailure={onFailureLogin}
           cookiePolicy={"single_host_origin"}
         />
-      
       </div>
       {isAuthenticated ? <Redirect to="/" /> : null}
     </div>
@@ -67,7 +67,8 @@ const Login = ({ setIsAuthenticated, isAuthenticated }) => {
 
 Login.propTypes = {
   setIsAuthenticated: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool.isRequired
+  isAuthenticated: PropTypes.bool.isRequired,
+  setUser: PropTypes.func.isRequired
 };
 
 export default Login;

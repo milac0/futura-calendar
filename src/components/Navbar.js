@@ -10,15 +10,17 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1
   },
   title: {
-    flexGrow: 1  }
+    flexGrow: 1
+  }
 }));
 
 const Navbar = ({ isAuthenticated, setIsAuthenticated }) => {
   const classes = useStyles();
 
   const handleLogout = () => {
-    setIsAuthenticated(false)
-  }
+    setIsAuthenticated(false);
+    localStorage.removeItem("calendarToken");
+  };
 
   return (
     <div className={classes.root}>
@@ -27,7 +29,11 @@ const Navbar = ({ isAuthenticated, setIsAuthenticated }) => {
           <Typography variant="h6" className={classes.title}>
             Futura Calendar
           </Typography>
-          {isAuthenticated ? <Button color="inherit" onClick={handleLogout}>Logout</Button> : null}
+          {isAuthenticated ? (
+            <Button color="inherit" onClick={handleLogout}>
+              Logout
+            </Button>
+          ) : null}
         </Toolbar>
       </AppBar>
     </div>
