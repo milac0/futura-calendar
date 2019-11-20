@@ -11,7 +11,8 @@ const useStyles = makeStyles(theme => ({
   },
   title: {
     flexGrow: 1,
-    textAlign: 'center'
+    textAlign: 'center',
+    marginLeft: 72
   }
 }));
 
