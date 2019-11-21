@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import AuthRoute from "./components/AuthRoute";
@@ -7,49 +7,64 @@ import Login from "./pages/Login";
 import Navbar from "./components/Navbar";
 import { getLocalStorageToken, checkAccessTokenExp } from "./util/funcs";
 
-function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState({});
-
-  useEffect(() => {
-    const checkToken = async () => {
-      const token = getLocalStorageToken();
-      if (token) {
-        setIsAuthenticated(await checkAccessTokenExp(token));
-      }
+class App extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      isAuthenticated: false,
+      token: ""
     };
-    checkToken();
-  });
+  }
 
-  return (
-    <Fragment>
-      <Navbar
-        isAuthenticated={isAuthenticated}
-        setIsAuthenticated={setIsAuthenticated}
-      />
-      <Router>
-        <Switch>
-          <AuthRoute
-            path="/"
-            component={Home}
-            exact
-            isAuthenticated={isAuthenticated}
-          />
-          <Route
-            path="/login"
-            render={props => (
-              <Login
-                {...props}
-                isAuthenticated={isAuthenticated}
-                setIsAuthenticated={setIsAuthenticated}
-                setUser={setUser}
-              />
-            )}
-          />
-        </Switch>
-      </Router>
-    </Fragment>
-  );
+  componentDidMount = async () => {
+      const accessToken = getLocalStorageToken();
+      if (accessToken) {
+        if (await checkAccessTokenExp(accessToken)) {
+          this.setState({ isAuthenticated: true, token: accessToken });
+        }
+      }
+  };
+
+  handleAuthentication = bool => {
+    this.setState({ isAuthenticated: bool });
+  };
+
+  getTokenFromLogin = token => {
+    localStorage.setItem("calendarToken", JSON.stringify(token));
+    this.setState({ token, isAuthenticated: true });
+  };
+
+  render() {
+    const { isAuthenticated } = this.state;
+    return (
+      <Fragment>
+        <Navbar
+          isAuthenticated={isAuthenticated}
+          handleAuthentication={this.handleAuthentication}
+        />
+        <Router>
+          <Switch>
+            <AuthRoute
+              path="/"
+              component={Home}
+              exact
+              isAuthenticated={isAuthenticated}
+            />
+            <Route
+              path="/login"
+              render={props => (
+                <Login
+                  {...props}
+                  isAuthenticated={isAuthenticated}
+                  getTokenFromLogin={this.getTokenFromLogin}
+                />
+              )}
+            />
+          </Switch>
+        </Router>
+      </Fragment>
+    );
+  }
 }
 
 export default App;

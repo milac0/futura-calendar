@@ -20,15 +20,12 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Login = ({ setIsAuthenticated, isAuthenticated, setUser }) => {
+const Login = ({ isAuthenticated, getTokenFromLogin }) => {
   const classes = useStyles();
   const [error, setError] = useState(false);
 
   const onSuccesLogin = response => {
-    console.log(response);
-    setUser(response);
-    setIsAuthenticated(true);
-    localStorage.setItem("calendarToken", JSON.stringify(response.accessToken));
+    getTokenFromLogin(response.accessToken);
   };
 
   const onFailureLogin = () => {
@@ -37,6 +34,7 @@ const Login = ({ setIsAuthenticated, isAuthenticated, setUser }) => {
 
   return (
     <div className={classes.container}>
+      {isAuthenticated ? <Redirect to="/" /> : null}
       <Typography align="center" variant="h5">
         {error ? "Error logging in. Try again." : "Login to see your calendar."}
       </Typography>
@@ -60,15 +58,13 @@ const Login = ({ setIsAuthenticated, isAuthenticated, setUser }) => {
           cookiePolicy={"single_host_origin"}
         />
       </div>
-      {isAuthenticated ? <Redirect to="/" /> : null}
     </div>
   );
 };
 
 Login.propTypes = {
-  setIsAuthenticated: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
-  setUser: PropTypes.func.isRequired
+  getTokenFromLogin: PropTypes.func.isRequired
 };
 
 export default Login;

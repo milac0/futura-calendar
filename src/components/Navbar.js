@@ -14,11 +14,11 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Navbar = ({ isAuthenticated, setIsAuthenticated }) => {
+const Navbar = ({ isAuthenticated, handleAuthentication }) => {
   const classes = useStyles();
 
   const handleLogout = () => {
-    setIsAuthenticated(false);
+    handleAuthentication(false);
     localStorage.removeItem("calendarToken");
   };
 
