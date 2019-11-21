@@ -33,3 +33,14 @@ export const fetchApi = async url => {
   });
   return res.data;
 };
+
+export const postEventApi = async (url, body) => {
+  let accessToken = getLocalStorageToken();
+  try {
+    await axios.post(url, body, {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};

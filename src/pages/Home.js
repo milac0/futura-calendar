@@ -5,6 +5,7 @@ import Grid from "@material-ui/core/Grid";
 import { Button, Container } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Events from './../components/Events';
+import CreateEventButton from "../components/CreateEventButton";
 
 const useStyles = makeStyles(theme => ({
   column: {
@@ -21,19 +22,27 @@ const useStyles = makeStyles(theme => ({
 const Home = () => {
   const classes = useStyles();
   const [calendars, setCalendars] = useState([]);
+  const [calendarId, setCalendarId] = useState('');
   const [events, setEvents] = useState([]);
   useEffect(() => {
     const fetchCalendarList = async () => {
       const data = await fetchApi('https://www.googleapis.com/calendar/v3/users/me/calendarList')
       const calendars = filterAccessibleCalendars(data.items);
       setCalendars(calendars);
-      await handleCalendarClick(calendars[0].id)
+      if(!calendarId){
+        setCalendarId(calendars[0].id);
+      }
+      await handleCalendarClick(calendarId);
     };
     fetchCalendarList();
   },[]);
 
   const handleCalendarClick = async (id) => {
+    if(!id){
+      return;
+    }
     const data = await fetchApi(`https://www.googleapis.com/calendar/v3/calendars/${id}/events`);
+    setCalendarId(id);
     setEvents(data.items)
   }
 
@@ -41,13 +50,7 @@ const Home = () => {
     <Container maxWidth="lg">
       <Grid container spacing={5}>
         <Grid className={classes.column} item xs={3}>
-          <Button
-            className={classes.calendarButton}
-            variant="contained"
-            color="secondary"
-          >
-            Create
-          </Button>
+          <CreateEventButton calendarId={calendarId} handleCalendarClick={handleCalendarClick}/>
           <hr />
           {calendars.map((calendar, i) => (
             <Button
