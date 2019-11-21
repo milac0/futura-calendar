@@ -22,5 +22,14 @@ export const checkAccessTokenExp = async token => {
   return valid;
 };
 
+export const filterAccessibleCalendars = arr => {
+  return arr.filter(item => !item.id.includes("group.v.calendar")).reverse();
+};
 
-// filter group.v.calendar calendarList
+export const fetchApi = async url => {
+  let accessToken = getLocalStorageToken();
+  const res = await axios.get(url, {
+    headers: { Authorization: `Bearer ${accessToken}` }
+  });
+  return res.data;
+};
