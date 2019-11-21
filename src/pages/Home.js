@@ -11,7 +11,9 @@ const useStyles = makeStyles(theme => ({
   column: {
     marginTop: "2em",
     "& hr": {
-      marginBottom: "1em"
+      margin: 0,
+      marginBottom: "1em",
+      width: 100,
     }
   },
   calendarButton: {
@@ -29,13 +31,13 @@ const Home = () => {
       const data = await fetchApi('https://www.googleapis.com/calendar/v3/users/me/calendarList')
       const calendars = filterAccessibleCalendars(data.items);
       setCalendars(calendars);
-      if(!calendarId){
+      if(calendarId === ''){
         setCalendarId(calendars[0].id);
       }
       await handleCalendarClick(calendarId);
     };
     fetchCalendarList();
-  },[]);
+  },[calendarId]);
 
   const handleCalendarClick = async (id) => {
     if(!id){
@@ -49,7 +51,7 @@ const Home = () => {
   return (
     <Container maxWidth="lg">
       <Grid container spacing={5}>
-        <Grid className={classes.column} item xs={3}>
+        <Grid className={classes.column} item xs={4}>
           <CreateEventButton calendarId={calendarId} handleCalendarClick={handleCalendarClick}/>
           <hr />
           {calendars.map((calendar, i) => (
@@ -64,8 +66,8 @@ const Home = () => {
             </Button>
           ))}
         </Grid>
-        <Grid className={classes.column} item xs={9}>
-          <Events events={events}/>
+        <Grid className={classes.column} item xs={8}>
+          <Events events={events} calendarId={calendarId} handleCalendarClick={handleCalendarClick} />
         </Grid>
       </Grid>
     </Container>

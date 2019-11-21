@@ -44,3 +44,10 @@ export const postEventApi = async (url, body) => {
     console.log(err);
   }
 };
+
+export const deleteEventApi = async url => {
+  let accessToken = getLocalStorageToken();
+  await axios.delete(url, {
+    headers: { Authorization: `Bearer ${accessToken}` }
+  })
+}
