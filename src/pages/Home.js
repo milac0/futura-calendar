@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import {
   filterAccessibleCalendars,
   fetchApi,
@@ -11,8 +11,9 @@ import Calendars from "../components/Calendars";
 import FilterTime from "../components/FilterTime";
 //mui
 import Grid from "@material-ui/core/Grid";
-import { Container, Button } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import EventsSevenDays from "./../components/EventsSevenDays";
 
 const useStyles = makeStyles(theme => ({
   column: {
@@ -81,7 +82,7 @@ const Home = () => {
   };
 
   return (
-    <Container maxWidth="lg">
+    <Fragment>
       <div className={classes.controls}>
         <FilterTime filterBy={handleFilterBy} />
         <Button
@@ -98,7 +99,7 @@ const Home = () => {
         </Button>
       </div>
       <Grid container spacing={5}>
-        <Grid className={classes.column} item xs={4}>
+        <Grid className={classes.column} item xs={2}>
           <CreateEventButton
             calendarId={calendarId}
             handleCalendarClick={handleCalendarClick}
@@ -109,16 +110,32 @@ const Home = () => {
             handleCalendarClick={handleCalendarClick}
           />
         </Grid>
-        <Grid className={classes.column} item xs={8}>
-          <Events
-            filteredEvents={filteredEvents}
-            calendarId={calendarId}
-            handleCalendarClick={handleCalendarClick}
-            date={date}
-          />
+        <Grid className={classes.column} item xs={10}>
+          {timeframe === 1 ? (
+            <Events
+              filteredEvents={filteredEvents}
+              calendarId={calendarId}
+              handleCalendarClick={handleCalendarClick}
+              date={date}
+            />
+          ) : timeframe === 7 ? (
+            <EventsSevenDays
+              filteredEvents={filteredEvents}
+              calendarId={calendarId}
+              handleCalendarClick={handleCalendarClick}
+              date={date}
+            />
+          ) : (
+            <Events
+              filteredEvents={filteredEvents}
+              calendarId={calendarId}
+              handleCalendarClick={handleCalendarClick}
+              date={date}
+            />
+          )}
         </Grid>
       </Grid>
-    </Container>
+    </Fragment>
   );
 };
 

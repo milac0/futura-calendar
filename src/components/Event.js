@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
   box: {
     border: "1px solid grey",
     borderRadius: 2,
-    width: 250,
+    maxWidth: 200,
     margin: "0.2em",
     padding: "0.25em",
     position: "relative"

@@ -72,3 +72,8 @@ export const eventsOnDays = (fromDate, toDate, events) =>
       moment(event.start.dateTime).isBetween(fromDate, toDate, "days", "[)")
     )
     .sort((a, b) => compare(a.start.dateTime, b.start.dateTime));
+
+export const eventsSortByDate = (date, events) =>
+  events
+    .filter(event => moment(event.start.dateTime).isSame(date, "day"))
+    .sort((a, b) => compare(a.start.dateTime, b.start.dateTime));
