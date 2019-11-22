@@ -42,5 +42,3 @@ const Event = ({ event, handleDelete }) => {
 };
 
 export default Event;
-
-//styleat typography i dodat brisanje

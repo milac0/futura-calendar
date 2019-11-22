@@ -51,3 +51,7 @@ export const deleteEventApi = async url => {
     headers: { Authorization: `Bearer ${accessToken}` }
   })
 }
+
+export const addEndTimeOnDate =  (date, endTime) => {
+  return date.slice(0,11).concat(endTime.slice(11));
+}

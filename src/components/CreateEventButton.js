@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from "react";
 import moment from "moment";
-import { postEventApi } from "../util/funcs";
+import { postEventApi, addEndTimeOnDate } from "../util/funcs";
 //mui
 import { makeStyles } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core";
@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
   dialogInput: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    width: 100
+    width: 200
   },
   dialog: {
     padding: "1em"
@@ -46,11 +46,15 @@ const CreateEventButton = ({ calendarId, handleCalendarClick }) => {
 
   // w/o input validation
   const handleCreate = async () => {
+    const start = moment(selectedDate).toISOString();
+    const end = moment(endTime).toISOString();
+    const endOnSameDay = addEndTimeOnDate(start, end);
+    
     const url = `https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events`;
     const dataBody = {
       summary,
-      start: { dateTime: moment(selectedDate).toISOString() },
-      end: { dateTime: moment(endTime).toISOString() }
+      start: { dateTime: start },
+      end: { dateTime: endOnSameDay }
     };
     await postEventApi(url, dataBody);
     handleCalendarClick(calendarId);
