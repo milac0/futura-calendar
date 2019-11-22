@@ -56,5 +56,19 @@ export const deleteEventApi = async url => {
 export const addEndTimeOnDate = (date, endTime) =>
   date.slice(0, 11).concat(endTime.slice(11));
 
-export const eventsOnDay = (date, events) =>
-  events.filter(event => moment(event.start.dateTime).isSame(date, "day"));
+const compare = (a, b) => {
+  if (moment(a).isBefore(moment(b))) {
+    return -1;
+  }
+  if (moment(a).isAfter(moment(b))) {
+    return 1;
+  }
+  return 0;
+};
+
+export const eventsOnDays = (fromDate, toDate, events) =>
+  events
+    .filter(event =>
+      moment(event.start.dateTime).isBetween(fromDate, toDate, "days", "[)")
+    )
+    .sort((a, b) => compare(a.start.dateTime, b.start.dateTime));

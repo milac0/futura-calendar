@@ -17,12 +17,12 @@ class App extends React.Component {
   }
 
   componentDidMount = async () => {
-      const accessToken = getLocalStorageToken();
-      if (accessToken) {
-        if (await checkAccessTokenExp(accessToken)) {
-          this.setState({ isAuthenticated: true, token: accessToken });
-        }
+    const accessToken = getLocalStorageToken();
+    if (accessToken) {
+      if (await checkAccessTokenExp(accessToken)) {
+        this.setState({ isAuthenticated: true, token: accessToken });
       }
+    }
   };
 
   handleAuthentication = bool => {

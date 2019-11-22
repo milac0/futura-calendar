@@ -49,7 +49,7 @@ const CreateEventButton = ({ calendarId, handleCalendarClick }) => {
     const start = moment(selectedDate).toISOString();
     const end = moment(endTime).toISOString();
     const endOnSameDay = addEndTimeOnDate(start, end);
-    
+
     const url = `https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events`;
     const dataBody = {
       summary,
