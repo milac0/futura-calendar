@@ -1,4 +1,5 @@
 import axios from "axios";
+import moment from "moment";
 
 export const getLocalStorageToken = () => {
   const token = localStorage.getItem("calendarToken");
@@ -49,9 +50,11 @@ export const deleteEventApi = async url => {
   let accessToken = getLocalStorageToken();
   await axios.delete(url, {
     headers: { Authorization: `Bearer ${accessToken}` }
-  })
-}
+  });
+};
 
-export const addEndTimeOnDate =  (date, endTime) => {
-  return date.slice(0,11).concat(endTime.slice(11));
-}
+export const addEndTimeOnDate = (date, endTime) =>
+  date.slice(0, 11).concat(endTime.slice(11));
+
+export const eventsOnDay = (date, events) =>
+  events.filter(event => moment(event.start.dateTime).isSame(date, "day"));
