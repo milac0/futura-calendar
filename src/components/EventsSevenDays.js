@@ -15,23 +15,18 @@ const EventsSevenDays = ({
   const [sevenDays, setSevenDays] = useState([]);
   useEffect(() => {
     const events = [];
-    const recursionFillEvents = (arr, increment) => {
-      if (increment === 7) {
-        return arr;
-      }
-      arr.push(
-        eventsSortByDate(moment(date).add(increment, "day"), filteredEvents)
-      );
-      return recursionFillEvents(arr, increment + 1);
-    };
-    recursionFillEvents(events, 0);
+    for(let i = 0; i < 7; i++){
+      events.push(eventsSortByDate(moment(date).add(i, "day"), filteredEvents))
+    }
     setSevenDays(events);
   }, [filteredEvents, date]);
+
   const handleDelete = async eventId => {
     const url = `https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events/${eventId}`;
     await deleteEventApi(url);
     await handleCalendarClick(calendarId);
   };
+
   const arr = [0, 1, 2, 3, 4, 5, 6];
 
   return (
@@ -39,7 +34,7 @@ const EventsSevenDays = ({
       <Typography>
         starting date: {moment(date).format("DD.MM.YYYY")}
       </Typography>
-      <Grid container>
+      <Grid container wrap="nowrap">
         {sevenDays.length
           ? arr.map(a => (
               <Grid key={a} item xl={2}>
